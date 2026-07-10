@@ -47,19 +47,19 @@ jobs:
         run: |
           pytest test_app.py -v
 
-build:
-  needs: test
+  build:
+    needs: test
 
-  runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-  steps:
-    - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-    - name: Upload Build Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: flask-build
-        path: .
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: flask-build
+          path: .
 
   deploy-staging:
 
