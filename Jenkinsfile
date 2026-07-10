@@ -1,6 +1,10 @@
 pipeline {
     agent any
-
+    
+    environment {
+        MONGO_URI = mongodb+srv://karankumarvnbs_db_user:CUCxZ2RF97EajIXu@karancluster.ticysbw.mongodb.net/
+        SECRET_KEY = CUCxZ2RF97EajIXu
+    }
     stages {
 
         stage('Install Dependencies') {
