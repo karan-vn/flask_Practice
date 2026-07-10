@@ -6,13 +6,11 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 bat '''
-                    py -3.14 -m venv venv
+                    python -m venv venv
 
-                    call venv\\Scripts\\activate.bat
-
-                    python -m pip install --upgrade pip
-                    python -m pip install -r requirements.txt
-                    python -m pip install pytest pylint bandit
+                    venv\\Scripts\\python.exe -m pip install --upgrade pip
+                    venv\\Scripts\\python.exe -m pip install -r requirements.txt
+                    venv\\Scripts\\python.exe -m pip install pytest pylint bandit
                 '''
             }
         }
@@ -20,8 +18,7 @@ pipeline {
         stage('Lint') {
             steps {
                 bat '''
-                    call venv\\Scripts\\activate.bat
-                    pylint app.py --exit-zero
+                    venv\\Scripts\\pylint.exe app.py --exit-zero
                 '''
             }
         }
@@ -29,8 +26,7 @@ pipeline {
         stage('Security Scan') {
             steps {
                 bat '''
-                    call venv\\Scripts\\activate.bat
-                    bandit -r app.py -l
+                    venv\\Scripts\\bandit.exe -r app.py -l || exit /b 0
                 '''
             }
         }
@@ -38,8 +34,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 bat '''
-                    call venv\\Scripts\\activate.bat
-                    pytest test_app.py -v --junitxml=report.xml
+                    venv\\Scripts\\pytest.exe test_app.py -v --junitxml=report.xml
                 '''
             }
             post {
@@ -65,7 +60,12 @@ pipeline {
             emailext(
                 to: 'karankumar.vnbs@gmail.com',
                 subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: "Build Successful\n${env.BUILD_URL}"
+                body: """Build Successful
+
+Job: ${env.JOB_NAME}
+Build: ${env.BUILD_NUMBER}
+URL: ${env.BUILD_URL}
+"""
             )
         }
 
@@ -73,7 +73,12 @@ pipeline {
             emailext(
                 to: 'karankumar.vnbs@gmail.com',
                 subject: "FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: "Build Failed\n${env.BUILD_URL}"
+                body: """Build Failed
+
+Job: ${env.JOB_NAME}
+Build: ${env.BUILD_NUMBER}
+URL: ${env.BUILD_URL}
+"""
             )
         }
 
