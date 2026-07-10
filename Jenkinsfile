@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        MONGO_URI = "mongodb+srv://karankumarvnbs_db_user:CUCxZ2RF97EajIXu@karancluster.ticysbw.mongodb.net/"
-        SECRET_KEY = "CUCxZ2RF97EajIXu"
+    MONGO_URI = "mongodb+srv://karankumarvnbs_db_user:CUCxZ2RF97EajIXu@karancluster.ticysbw.mongodb.net/studentsdb?retryWrites=true&w=majority"
+    SECRET_KEY = "CUCxZ2RF97EajIXu"
     }
     stages {
 
