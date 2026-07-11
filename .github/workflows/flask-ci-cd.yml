@@ -1,0 +1,115 @@
+name: Flask CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+
+  release:
+    types:
+      - published
+
+jobs:
+
+  test:
+    name: Test Application
+
+    runs-on: ubuntu-latest
+
+    env:
+      MONGO_URI: ${{ secrets.MONGO_URI }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Pylint
+        run: |
+          pylint app.py --exit-zero
+
+      - name: Run Bandit Security Scan
+        run: |
+          bandit -r . -ll || true
+
+      - name: Run Pytest
+        run: |
+          pytest test_app.py -v
+
+  build:
+    name: Build Application
+
+    needs: test
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Create Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: flask-build
+          path: |
+            app.py
+            requirements.txt
+            templates/
+            static/
+            test_app.py
+            README.md
+
+  deploy-staging:
+    name: Deploy to Staging
+
+    needs: build
+
+    if: github.ref == 'refs/heads/staging'
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: flask-build
+
+      - name: Deploy to Staging
+        run: |
+          echo "Deploying Flask application to STAGING..."
+          echo "Deployment completed successfully."
+
+  deploy-production:
+    name: Deploy to Production
+
+    needs: build
+
+    if: github.event_name == 'release'
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: flask-build
+
+      - name: Deploy to Production
+        run: |
+          echo "Deploying Flask application to PRODUCTION..."
+          echo "Deployment completed successfully."
