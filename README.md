@@ -1,134 +1,359 @@
-# Student Registration System
+# Student Registration System – CI/CD Pipeline
 
-A simple **Flask** web application to manage student records with **MongoDB** as the backend database. Users can **add, view, update, and delete** student details.
+## Project Overview
 
----
+This project demonstrates the implementation of Continuous Integration and Continuous Deployment (CI/CD) for a Flask-based Student Registration System using:
 
-## Features
+- Jenkins Pipeline
+- GitHub Actions
+- MongoDB Atlas
+- GitHub
+- Python 3.13
+- Flask
 
-* List all students on the home page
-* Add a new student
-* Update existing student details
-* Delete a student with confirmation
-* Simple and responsive UI using Bootstrap
-
----
-
-## Tech Stack
-
-* **Backend:** Python, Flask
-* **Database:** MongoDB (via Flask-PyMongo)
-* **Frontend:** HTML, Jinja2 templates, Bootstrap 5
-* **Environment Variables:** Managed via `.env` file
+The application allows users to perform CRUD (Create, Read, Update, Delete) operations on student records stored in MongoDB Atlas.
 
 ---
 
-## Setup Instructions
+# Technologies Used
 
-### 1. Clone the repository
+- Python 3.13
+- Flask
+- Flask-PyMongo
+- MongoDB Atlas
+- MongoDB Compass
+- Jenkins
+- GitHub Actions
+- Pytest
+- Pylint
+- Bandit
+- Git & GitHub
 
-```bash
-git clone <your-repo-url>
-cd <repo-folder>
+---
+
+# Project Structure
+
+```
+.
+├── .github/
+│   └── workflows/
+│       └── flask-ci-cd.yml
+├── templates/
+├── app.py
+├── test_app.py
+├── requirements.txt
+├── Jenkinsfile
+├── README.md
+└── LICENSE
 ```
 
-### 2. Create and activate a virtual environment
+---
+
+# Application Features
+
+- Add Student
+- Update Student
+- Delete Student
+- View Student List
+- MongoDB Atlas Integration
+- Automated Testing
+- Automated Security Scan
+- Automated Linting
+- CI/CD Pipeline
+
+---
+
+# Phase 1 – Jenkins CI/CD Pipeline
+
+## Jenkins Pipeline Stages
+
+1. Install Dependencies
+2. Lint Code (Pylint)
+3. Security Scan (Bandit)
+4. Run Unit Tests (Pytest)
+5. Deploy Flask Application
+6. Email Notification
+7. Workspace Cleanup
+
+---
+
+## Jenkins Pipeline Execution
+
+```
+Checkout Source Code
+        ↓
+Install Dependencies
+        ↓
+Run Pylint
+        ↓
+Run Bandit
+        ↓
+Run Pytest
+        ↓
+Deploy Flask Application
+        ↓
+Email Notification
+```
+
+---
+
+# Phase 2 – GitHub Actions CI/CD
+
+The GitHub Actions workflow automatically executes whenever code is pushed.
+
+## Workflow Trigger
+
+### Push to Main Branch
+
+- Install Dependencies
+- Run Lint
+- Run Security Scan
+- Execute Tests
+- Build Application
+
+### Push to Staging Branch
+
+- Install Dependencies
+- Run Tests
+- Build Application
+- Deploy to Staging
+
+### Release Creation
+
+- Install Dependencies
+- Run Tests
+- Build Application
+- Deploy to Production
+
+---
+
+# GitHub Actions Workflow
+
+The workflow consists of four jobs:
+
+## Test Application
+
+- Checkout Repository
+- Setup Python
+- Install Dependencies
+- Configure Environment Variables
+- Run Pylint
+- Run Bandit
+- Run Pytest
+
+---
+
+## Build Application
+
+Creates a build artifact containing the application source code.
+
+---
+
+## Deploy to Staging
+
+Runs automatically when changes are pushed to the **staging** branch.
+
+(Currently simulated using deployment messages.)
+
+---
+
+## Deploy to Production
+
+Runs automatically whenever a GitHub Release is published.
+
+(Currently simulated using deployment messages.)
+
+---
+
+# Environment Secrets
+
+The following GitHub Secrets are required.
+
+Navigate to:
+
+```
+Repository
+    ↓
+Settings
+    ↓
+Secrets and Variables
+    ↓
+Actions
+```
+
+Add:
+
+| Secret Name | Description |
+|-------------|-------------|
+| MONGO_URI | MongoDB Atlas Connection String |
+| SECRET_KEY | Flask Secret Key |
+
+Example:
+
+```
+MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/studentsdb?retryWrites=true&w=majority
+
+SECRET_KEY=your_secret_key
+```
+
+---
+
+# Installing the Project
+
+Clone the repository.
+
+```bash
+git clone https://github.com/<your-username>/<repository-name>.git
+
+cd <repository-name>
+```
+
+Create a virtual environment.
 
 ```bash
 python -m venv venv
-# Activate venv
-# Windows:
-venv\Scripts\activate
-# Linux / Mac:
-source venv/bin/activate
 ```
 
-### 3. Install dependencies
+Activate the virtual environment.
+
+### Windows
+
+```bash
+venv\Scripts\activate
+```
+
+Install dependencies.
 
 ```bash
 pip install -r requirements.txt
 ```
 
-**`requirements.txt` example:**
+Create a `.env` file.
 
 ```
-Flask
-Flask-PyMongo
-python-dotenv
-bson
+MONGO_URI=<your_mongodb_connection_string>
+
+SECRET_KEY=<your_secret_key>
 ```
 
-### 4. Configure environment variables
-
-Create a `.env` file in the project root:
-
-```
-MONGO_URI=<your-mongodb-connection-string>
-SECRET_KEY=<your-secret-key>
-```
-
-### 5. Run the application
+Run the application.
 
 ```bash
 python app.py
 ```
 
-Open your browser at: [http://localhost:8000](http://localhost:8000)
-
----
-
-## Project Structure
+Application URL
 
 ```
-project/
-│
-├── templates/
-│   ├── base.html
-│   ├── index.html
-│   ├── add_student.html
-│   ├── update_student.html
-│
-├── app.py
-├── requirements.txt
-└── .env
+http://127.0.0.1:5000
 ```
 
 ---
 
-## Screenshots
+# Running Tests
 
-**Home Page**
-Lists all students with Edit/Delete buttons.
-- <img width="1902" height="607" alt="image" src="https://github.com/user-attachments/assets/a58a6a6d-4978-4769-8074-232e4d31e69d" />
-
-
-**Add Student**
-Form to add a new student.
-- <img width="1897" height="801" alt="image" src="https://github.com/user-attachments/assets/d65d25c3-ebb5-410a-adb1-e130ad7c5878" />
-
-
-**Update Student**
-Form pre-filled with student details.
-- <img width="1905" height="897" alt="image" src="https://github.com/user-attachments/assets/04febf01-879f-431f-ab07-abcfb993acf1" />
-
-
+```bash
+pytest test_app.py -v
+```
 
 ---
 
-## Notes
+# Running Pylint
 
-* Make sure MongoDB is running and accessible via the URI in `.env`
-* Delete action includes a confirmation page to prevent accidental deletion
-* Uses `ObjectId` from `bson` to work with MongoDB document IDs
-* If you use MongoDB Atlas on macOS, install dependencies again (`pip install -r requirements.txt`). This project now uses `certifi` CA bundle explicitly to avoid common TLS certificate verification failures with `pymongo`.
-
----
-
-## License
-
-MIT License
+```bash
+pylint app.py --exit-zero
+```
 
 ---
 
+# Running Bandit
+
+```bash
+bandit -r .
+```
+
+---
+
+# MongoDB Atlas
+
+The application uses MongoDB Atlas for storing student records.
+
+Database:
+
+```
+studentsdb
+```
+
+Collection:
+
+```
+students
+```
+
+---
+
+# CI/CD Workflow
+
+```
+Developer Push
+        │
+        ▼
+GitHub Repository
+        │
+        ▼
+GitHub Actions
+        │
+        ▼
+Install Dependencies
+        │
+        ▼
+Pylint
+        │
+        ▼
+Bandit
+        │
+        ▼
+Pytest
+        │
+        ▼
+Build Application
+        │
+        ├──────────────► Staging Deployment
+        │
+        └──────────────► Production Deployment
+```
+
+---
+
+# Assignment Deliverables
+
+✅ Jenkins Pipeline
+
+✅ GitHub Actions Workflow
+
+✅ Automated Testing
+
+✅ Automated Linting
+
+✅ Security Scanning
+
+✅ Build Artifact
+
+✅ Staging Deployment
+
+✅ Production Deployment
+
+✅ MongoDB Atlas Integration
+
+---
+
+## Required Screenshots
+
+<img width="959" height="403" alt="Screenshot 2026-07-11 081612" src="https://github.com/user-attachments/assets/a96596cb-f2a1-4fb9-81ba-b8a790ba3648" />
 
 
+<img width="959" height="560" alt="Screenshot 2026-07-11 081317" src="https://github.com/user-attachments/assets/ee04b079-021a-4165-b3e6-e59555cb6f11" />
+
+<img width="727" height="314" alt="image" src="https://github.com/user-attachments/assets/af4c26d7-16e9-476f-8374-f925fd61aef3" />
+
+<img width="725" height="367" alt="Screenshot 2026-07-09 210129" src="https://github.com/user-attachments/assets/58e6f4d8-9b7d-4571-be99-0f0721adaf0d" />
